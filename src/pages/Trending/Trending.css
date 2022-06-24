@@ -1,0 +1,6 @@
+.trending {
+    display: flex;
+    /* flexwrap used to prevent overflow */
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
