@@ -1,23 +1,29 @@
-import {useState,useEffect} from 'react';
+import { useState, useEffect } from "react";
 import axios from "axios";
-import SingleContent from '../../component/SingleContent/SingleContent';
-import CustomPagination from '../../component/Pagination/CustomPagination';
+import SingleContent from "../../component/SingleContent/SingleContent";
+import CustomPagination from "../../component/Pagination/CustomPagination";
 import "./Movies.css";
 import Genres from "../../component/Genre/Genres";
-import useGenre from '../../hooks/useGenre';
+import useGenre from "../../hooks/useGenre";
 
 const Movies = () => {
+  //select genres
   const [genres, setGenres] = useState([]);
+  //set selected genres
   const [selectedGenres, setSelectedGenres] = useState([]);
+
   const [page, setPage] = useState(1);
   const [content, setContent] = useState([]);
   const [numOfPages, setNumOfPages] = useState();
+  //send selected genres to useGenre hook as props
   const genreforURL = useGenre(selectedGenres);
   // console.log(selectedGenres);
 
   const fetchMovies = async () => {
     const { data } = await axios.get(
-      `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreforURL}`
+      //set the url for movies and series because then the api will search on basis of genres
+      `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}
+      &with_genres=${genreforURL}`
     );
     setContent(data.results);
     setNumOfPages(data.total_pages);
@@ -27,6 +33,7 @@ const Movies = () => {
     window.scroll(0, 0);
     fetchMovies();
     // eslint-disable-next-line
+    //use genreforurl as dependency so that when the genre is changed the url will change and pade will refresh
   }, [genreforURL, page]);
 
   return (

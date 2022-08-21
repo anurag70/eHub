@@ -13,6 +13,7 @@ import "./ContentModal.css";
 import { Button } from "@material-ui/core";
 import YouTubeIcon from "@material-ui/icons/YouTube";
 import Carousel from "../Carousel/Carousel";
+import AddIcon from "@material-ui/icons/Add";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -45,7 +46,7 @@ export default function TransitionsModal({ children, media_type, id }) {
   const handleClose = () => {
     setOpen(false);
   };
-
+  //fetch data from api using media_type and id which we get from singlecontent.js
   const fetchData = async () => {
     const { data } = await axios.get(
       `https://api.themoviedb.org/3/${media_type}/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
@@ -68,7 +69,7 @@ export default function TransitionsModal({ children, media_type, id }) {
     fetchVideo();
     // eslint-disable-next-line
   }, []);
-
+  //now every singlecontent will behave like a button
   return (
     <>
       <div
@@ -77,6 +78,7 @@ export default function TransitionsModal({ children, media_type, id }) {
         color="inherit"
         onClick={handleOpen}
       >
+        {/*here children we got from singlecontent*/}
         {children}
       </div>
       <Modal
@@ -91,6 +93,7 @@ export default function TransitionsModal({ children, media_type, id }) {
           timeout: 500,
         }}
       >
+        {/*open after clicking on the singlecontent*/}
         <Fade in={open}>
           {content && (
             <div className={classes.paper}>
@@ -102,6 +105,7 @@ export default function TransitionsModal({ children, media_type, id }) {
                       : unavailable
                   }
                   alt={content.name || content.title}
+                  //potrait or landscape a/c to the width of the display
                   className="ContentModal__portrait"
                 />
                 <img
@@ -111,16 +115,16 @@ export default function TransitionsModal({ children, media_type, id }) {
                       : unavailableLandscape
                   }
                   alt={content.name || content.title}
+                  //potrait or landscape a/c to the width of the display
                   className="ContentModal__landscape"
                 />
+                {/*add title,details*/}
                 <div className="ContentModal__about">
                   <span className="ContentModal__title">
                     {content.name || content.title} (
-                    {(
-                      content.first_air_date ||
-                      content.release_date ||
-                      "-----"
-                    ).substring(0, 4)}
+                    {(content.first_air_date || content.release_date || "-----")
+                      //when both doesn't exist then it will show ----
+                      .substring(0, 4)}
                     )
                   </span>
                   {content.tagline && (
@@ -132,6 +136,7 @@ export default function TransitionsModal({ children, media_type, id }) {
                   </span>
 
                   <div>
+                    {/*pass mediatype and id as props to carousel component*/}
                     <Carousel id={id} media_type={media_type} />
                   </div>
 
@@ -140,9 +145,18 @@ export default function TransitionsModal({ children, media_type, id }) {
                     startIcon={<YouTubeIcon />}
                     color="secondary"
                     target="__blank"
+                    //here add video id in url of youtube url
                     href={`https://www.youtube.com/watch?v=${video}`}
                   >
                     Watch the Trailer
+                  </Button>
+                  <Button
+                    variant="contained"
+                    startIcon={<AddIcon />}
+                    color="secondary"
+                    style={{ marginTop: 5 }}
+                  >
+                    Add to list
                   </Button>
                 </div>
               </div>

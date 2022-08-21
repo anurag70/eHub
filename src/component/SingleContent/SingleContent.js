@@ -1,22 +1,23 @@
 import { Badge } from "@material-ui/core";
-import React from 'react'
+import React from "react";
 import { img_300, unavailable } from "../../config/config";
 import "./SingleContent.css";
 import ContentModal from "../ContentModal/ContentModal";
 //props destructed from  trending.js
-const SingleContent = (
-   { id,
-      poster,
-      title,
-      date,
-      media_type,
-      vote_average,
-   }
-) => {
-   return (
-      <ContentModal media_type={media_type} id={id}>
-         <Badge
-          
+const SingleContent = ({
+  id,
+  poster,
+  title,
+  date,
+  media_type,
+  vote_average,
+}) => {
+  return (
+    //use contentmodal as tag
+    //here down below everything is children of contentmodal tag
+    //send mediatype and id to contentmodal as props
+    <ContentModal media_type={media_type} id={id}>
+      <Badge
         badgeContent={vote_average}
         color={vote_average > 6 ? "primary" : "secondary"}
       />
@@ -30,10 +31,8 @@ const SingleContent = (
         {media_type === "tv" ? "TV Series" : "Movie"}
         <span className="subTitle">{date}</span>
       </span>
-      </ContentModal>
-      
-   );
-  
+    </ContentModal>
+  );
 };
 
 export default SingleContent;

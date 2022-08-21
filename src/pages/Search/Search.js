@@ -1,21 +1,13 @@
-import {
-  Button,
-  
-  Tab,
-  Tabs,
-  TextField,
-  ThemeProvider,
-} from "@material-ui/core";
-import { createTheme } from '@material-ui/core/styles'
+import { Button, Tab, Tabs, TextField, ThemeProvider } from "@material-ui/core";
+import { createTheme } from "@material-ui/core/styles";
 import "./Search.css";
-import SearchIcon from "@material-ui/icons/Search";
+//import SearchIcon from "@material-ui/icons/Search";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import CustomPagination from "../../component/Pagination/CustomPagination";
 import SingleContent from "../../component/SingleContent/SingleContent";
 
 const Search = () => {
-
   const [type, setType] = useState(0);
   //searchtext is for text of searchbox
   const [searchText, setSearchText] = useState("");
@@ -23,7 +15,7 @@ const Search = () => {
   const [page, setPage] = useState(1);
   const [content, setContent] = useState([]);
   const [numOfPages, setNumOfPages] = useState();
-//for dark theme
+  //for dark theme
   const darkTheme = createTheme({
     palette: {
       type: "dark",
@@ -32,6 +24,11 @@ const Search = () => {
       },
     },
   });
+  const onChange = (e) => {
+    e.preventDefault();
+    setSearchText(e.target.value);
+  };
+  console.log(searchText);
 
   const fetchSearch = async () => {
     try {
@@ -43,7 +40,7 @@ const Search = () => {
       );
       setContent(data.results);
       setNumOfPages(data.total_pages);
-      // console.log(data);
+      //console.log(data);
     } catch (error) {
       console.error(error);
     }
@@ -54,7 +51,7 @@ const Search = () => {
     fetchSearch();
     // eslint-disable-next-line
     //whenever the type or page is changed it will call fetchsearch fn again
-  }, [type, page]);
+  }, [searchText, type, page]);
 
   return (
     <div>
@@ -65,15 +62,18 @@ const Search = () => {
             className="searchBox"
             label="Search"
             variant="filled"
-            onChange={(e) => setSearchText(e.target.value)}
+            onChange={onChange}
           />
-          <Button
+          {/*<Button
             onClick={fetchSearch}
             variant="contained"
             style={{ marginLeft: 10 }}
           >
+            
             <SearchIcon fontSize="large" />
+  
           </Button>
+  */}
         </div>
 
         {/* for movie and series */}
@@ -93,7 +93,7 @@ const Search = () => {
           <Tab style={{ width: "50%" }} label="Search TV Series" />
         </Tabs>
       </ThemeProvider>
-      <div className="trending">
+      <div className="search">
         {content &&
           content.map((c) => (
             <SingleContent
